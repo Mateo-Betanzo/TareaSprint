@@ -1,3 +1,43 @@
+// Language Switcher
+const langBtns = document.querySelectorAll('.lang-btn');
+const currentLang = localStorage.getItem('language') || 'en';
+
+// Set initial language on page load
+document.documentElement.lang = currentLang;
+updateLanguage(currentLang);
+langBtns.forEach(btn => {
+  if (btn.dataset.lang === currentLang) {
+    btn.classList.add('active');
+  }
+});
+
+langBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lang = btn.dataset.lang;
+    localStorage.setItem('language', lang);
+    document.documentElement.lang = lang;
+    updateLanguage(lang);
+    
+    // Update active button
+    langBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+function updateLanguage(lang) {
+  document.querySelectorAll('[data-en]').forEach(element => {
+    const text = element.dataset[lang];
+    if (text) {
+      // Handle HTML content (like <br/> tags)
+      if (text.includes('<br')) {
+        element.innerHTML = text.replace(/&lt;br\/?&gt;/g, '<br/>');
+      } else {
+        element.textContent = text;
+      }
+    }
+  });
+}
+
 // Sticky navbar border on scroll
   const navbar = document.getElementById('navbar');
   const heroPhone = document.getElementById('heroPhone');
